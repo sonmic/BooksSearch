@@ -8,6 +8,10 @@ export default class Saved extends React.Component {
   };
 
   componentDidMount() {
+    this.refresh();
+  }
+
+  refresh() {
     axios
       .get("/api/books")
       .then(response => this.setState({ books: response.data }))
@@ -17,7 +21,11 @@ export default class Saved extends React.Component {
   render() {
     return (
       <div className="savedContainer">
-        <Search books={this.state.books} />
+        <Search
+          showDeleteButton={true}
+          books={this.state.books}
+          onDelete={() => this.refresh()}
+        />
       </div>
     );
   }

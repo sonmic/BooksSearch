@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
+import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
 import FavoriteIcon from "@material-ui/icons/Favorite";
 import InfoIcon from "@material-ui/icons/Info";
 import IconButton from "@material-ui/core/IconButton";
@@ -19,7 +20,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-function Book({ book }) {
+function Book({ book, showDeleteButton, onDelete }) {
   const { authors, description, image, link, title, subtitle } = book;
   const classes = useStyles();
   const [favoriteOnly, setFavoriteOnly] = useState(false);
@@ -42,20 +43,38 @@ function Book({ book }) {
                   <InfoIcon />
                 </IconButton>
               </a>
-              <IconButton
-                onClick={() => {
-                  return axios
-                    .post("/api/books", book)
-                    .then(response => {
-                      setFavoriteOnly(!favoriteOnly);
-                    })
-                    .catch(error => {
-                      alert("Could not save: " + error);
-                    });
-                }}
-              >
-                <FavoriteIcon color={favoriteOnly ? "secondary" : "inherit"} />
-              </IconButton>
+              {showDeleteButton && (
+                <IconButton
+                  onClick={() => {
+                    return axios
+                      .delete("/api/books/" + book._id)
+                      .then(response => onDelete())
+                      .catch(error => {
+                        alert("Could not delete: " + error);
+                      });
+                  }}
+                >
+                  <DeleteForeverIcon />
+                </IconButton>
+              )}
+              {!showDeleteButton && (
+                <IconButton
+                  onClick={() => {
+                    return axios
+                      .post("/api/books", book)
+                      .then(response => {
+                        setFavoriteOnly(!favoriteOnly);
+                      })
+                      .catch(error => {
+                        alert("Could not save: " + error);
+                      });
+                  }}
+                >
+                  <FavoriteIcon
+                    color={favoriteOnly ? "secondary" : "inherit"}
+                  />
+                </IconButton>
+              )}
             </div>
           </Grid>
           <Grid item xs={3}>
@@ -75,11 +94,15 @@ function Book({ book }) {
     </div>
   );
 }
-function Search({ books }) {
+function Search({ books, showDeleteButton, onDelete }) {
   return (
     <div className="searchContainer">
       {books.map(book => (
-        <Book book={book} />
+        <Book
+          book={book}
+          showDeleteButton={showDeleteButton}
+          onDelete={onDelete}
+        />
       ))}
     </div>
   );

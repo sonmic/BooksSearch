@@ -25,9 +25,18 @@ app.get("/api/books", (req, res) => {
 });
 
 app.post("/api/books", (req, res) => {
-  console.log(req.body);
-
   Book.create(req.body, function(err) {
+    if (err) {
+      console.log(err);
+      res.status(500).json({});
+    } else {
+      res.json({});
+    }
+  });
+});
+
+app.delete("/api/books/:id", (req, res) => {
+  Book.findOneAndDelete({ _id: req.params.id }, err => {
     if (err) {
       console.log(err);
       res.status(500).json({});
