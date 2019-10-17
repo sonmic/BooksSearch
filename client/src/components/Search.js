@@ -20,16 +20,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 function Book({ book }) {
-  const { volumeInfo } = book;
-  const {
-    title,
-    subtitle,
-    authors = [],
-    description,
-    imageLinks = {},
-    canonicalVolumeLink
-  } = volumeInfo;
-  const { smallThumbnail } = imageLinks;
+  const { authors, description, image, link, title, subtitle } = book;
   const classes = useStyles();
   const [favoriteOnly, setFavoriteOnly] = useState(false);
 
@@ -37,32 +28,24 @@ function Book({ book }) {
     <div className={classes.root}>
       <Paper className={classes.root}>
         <Grid container spacing={1}>
-          <Grid item xs={9}>
+          <Grid item xs={10}>
             <div className={classes.paper}>
               <div className="title">{title} </div>
               <div className="subTitle">{subtitle} </div>
               <div className="author">{authors.join(", ")}</div>
             </div>
           </Grid>
-          <Grid item xs={3}>
+          <Grid item xs={2}>
             <div className={classes.paper}>
-              <a href={canonicalVolumeLink} target="_blank">
+              <a href={link} target="_blank">
                 <IconButton>
                   <InfoIcon />
                 </IconButton>
               </a>
               <IconButton
                 onClick={() => {
-                  const payload = {
-                    authors,
-                    description,
-                    image: smallThumbnail,
-                    link: canonicalVolumeLink,
-                    title
-                  };
-
                   return axios
-                    .post("/api/books", payload)
+                    .post("/api/books", book)
                     .then(response => {
                       setFavoriteOnly(!favoriteOnly);
                     })
@@ -78,7 +61,7 @@ function Book({ book }) {
           <Grid item xs={3}>
             <div className={classes.paper}>
               <div className="preview">
-                <img src={smallThumbnail} alt="preview" className="bookImage" />
+                <img src={image} alt="preview" className="bookImage" />
               </div>
             </div>
           </Grid>
@@ -93,11 +76,9 @@ function Book({ book }) {
   );
 }
 function Search({ books }) {
-  const { data = {} } = books;
-  const { items = [] } = data;
   return (
     <div className="searchContainer">
-      {items.map(book => (
+      {books.map(book => (
         <Book book={book} />
       ))}
     </div>

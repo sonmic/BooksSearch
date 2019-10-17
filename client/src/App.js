@@ -6,7 +6,7 @@ import Saved from "./components/Saved";
 import BookAppBar from "./components/BookAppBar";
 
 function App() {
-  const [books, setBooks] = useState({});
+  const [books, setBooks] = useState([]);
   return (
     <Router>
       <div>

@@ -18,6 +18,12 @@ mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/googlebooks");
 
 // Define API routes here
 
+app.get("/api/books", (req, res) => {
+  Book.find({})
+    .then(dbModel => res.json(dbModel))
+    .catch(err => res.status(422).json(err));
+});
+
 app.post("/api/books", (req, res) => {
   console.log(req.body);
 

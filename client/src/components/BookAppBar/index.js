@@ -12,6 +12,7 @@ import SearchIcon from "@material-ui/icons/Search";
 import FavoriteIcon from "@material-ui/icons/Favorite";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import axios from "axios";
+import { withRouter } from "react-router-dom";
 
 const useStyles = makeStyles(theme => ({
   grow: {
@@ -81,7 +82,32 @@ function bookSearch(query) {
   );
 }
 
-export default function BookAppBar(props) {
+function convertBooks(response) {
+  const { data = {} } = response;
+  const { items = [] } = data;
+  return items.map(item => {
+    const { volumeInfo } = item;
+    const {
+      title,
+      subtitle,
+      authors = [],
+      description,
+      imageLinks = {},
+      canonicalVolumeLink
+    } = volumeInfo;
+    const { smallThumbnail } = imageLinks;
+    return {
+      authors,
+      description,
+      image: smallThumbnail,
+      link: canonicalVolumeLink,
+      title,
+      subtitle
+    };
+  });
+}
+
+function BookAppBar(props) {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
@@ -134,7 +160,7 @@ export default function BookAppBar(props) {
       onClose={handleMobileMenuClose}
     ></Menu>
   );
-  const { onSearch } = props;
+  const { onSearch, history } = props;
   return (
     <div className={classes.grow}>
       <AppBar position="static">
@@ -154,7 +180,9 @@ export default function BookAppBar(props) {
             </div>
             <InputBase
               onChange={event => {
-                bookSearch(event.target.value).then(onSearch);
+                bookSearch(event.target.value).then(response =>
+                  onSearch(convertBooks(response))
+                );
               }}
               placeholder="Search…"
               classes={{
@@ -166,7 +194,13 @@ export default function BookAppBar(props) {
           </div>
           <div className={classes.grow} />
           <div className={classes.sectionDesktop}>
-            <IconButton>
+            <IconButton
+              onClick={() =>
+                history.push(
+                  history.location.pathname.indexOf("fav") >= 0 ? "/" : "/fav"
+                )
+              }
+            >
               <FavoriteIcon />
             </IconButton>
           </div>
@@ -177,3 +211,5 @@ export default function BookAppBar(props) {
     </div>
   );
 }
+
+export default withRouter(BookAppBar);
