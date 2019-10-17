@@ -11,6 +11,7 @@ import MenuIcon from "@material-ui/icons/Menu";
 import SearchIcon from "@material-ui/icons/Search";
 import FavoriteIcon from "@material-ui/icons/Favorite";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import axios from "axios";
 
 const useStyles = makeStyles(theme => ({
   grow: {
@@ -74,7 +75,13 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function BookAppBar() {
+function bookSearch(query) {
+  return axios.get(
+    `https://www.googleapis.com/books/v1/volumes?q=${query}&key=AIzaSyDPW-tCMp7LrSdITc6L3UZ3Wcal4viwG7w`
+  );
+}
+
+export default function BookAppBar(props) {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
@@ -127,6 +134,7 @@ export default function BookAppBar() {
       onClose={handleMobileMenuClose}
     ></Menu>
   );
+  const { onSearch } = props;
   return (
     <div className={classes.grow}>
       <AppBar position="static">
@@ -145,6 +153,9 @@ export default function BookAppBar() {
               <SearchIcon />
             </div>
             <InputBase
+              onChange={event => {
+                bookSearch(event.target.value).then(onSearch);
+              }}
               placeholder="Search…"
               classes={{
                 root: classes.inputRoot,
