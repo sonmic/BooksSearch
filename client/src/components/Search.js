@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import FavoriteIcon from "@material-ui/icons/Favorite";
 import InfoIcon from "@material-ui/icons/Info";
 import IconButton from "@material-ui/core/IconButton";
+import axios from "axios";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -23,13 +24,14 @@ function Book({ book }) {
   const {
     title,
     subtitle,
-    authors,
+    authors = [],
     description,
-    imageLinks,
+    imageLinks = {},
     canonicalVolumeLink
   } = volumeInfo;
   const { smallThumbnail } = imageLinks;
   const classes = useStyles();
+  const [favoriteOnly, setFavoriteOnly] = useState(false);
 
   return (
     <div className={classes.root}>
@@ -39,7 +41,7 @@ function Book({ book }) {
             <div className={classes.paper}>
               <div className="title">{title} </div>
               <div className="subTitle">{subtitle} </div>
-              <div className="author">{authors} </div>
+              <div className="author">{authors.join(", ")}</div>
             </div>
           </Grid>
           <Grid item xs={3}>
@@ -49,8 +51,27 @@ function Book({ book }) {
                   <InfoIcon />
                 </IconButton>
               </a>
-              <IconButton>
-                <FavoriteIcon />
+              <IconButton
+                onClick={() => {
+                  const payload = {
+                    authors,
+                    description,
+                    image: smallThumbnail,
+                    link: canonicalVolumeLink,
+                    title
+                  };
+
+                  return axios
+                    .post("/api/books", payload)
+                    .then(response => {
+                      setFavoriteOnly(!favoriteOnly);
+                    })
+                    .catch(error => {
+                      alert("Could not save: " + error);
+                    });
+                }}
+              >
+                <FavoriteIcon color={favoriteOnly ? "secondary" : "inherit"} />
               </IconButton>
             </div>
           </Grid>
