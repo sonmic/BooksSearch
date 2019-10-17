@@ -2,6 +2,9 @@ import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
+import FavoriteIcon from "@material-ui/icons/Favorite";
+import InfoIcon from "@material-ui/icons/Info";
+import IconButton from "@material-ui/core/IconButton";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -17,7 +20,14 @@ const useStyles = makeStyles(theme => ({
 
 function Book({ book }) {
   const { volumeInfo } = book;
-  const { title, subtitle, authors, description, imageLinks } = volumeInfo;
+  const {
+    title,
+    subtitle,
+    authors,
+    description,
+    imageLinks,
+    canonicalVolumeLink
+  } = volumeInfo;
   const { smallThumbnail } = imageLinks;
   const classes = useStyles();
 
@@ -33,7 +43,16 @@ function Book({ book }) {
             </div>
           </Grid>
           <Grid item xs={3}>
-            <div className={classes.paper}>fav btn</div>
+            <div className={classes.paper}>
+              <a href={canonicalVolumeLink} target="_blank">
+                <IconButton>
+                  <InfoIcon />
+                </IconButton>
+              </a>
+              <IconButton>
+                <FavoriteIcon />
+              </IconButton>
+            </div>
           </Grid>
           <Grid item xs={3}>
             <div className={classes.paper}>

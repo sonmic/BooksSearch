@@ -1,5 +1,29 @@
 body {
   margin: 0;
   padding: 0;
-  font-family: sans-serif;
+  font-family: "Lato";
+}
+
+.navbar {
+  font-family: "Lato" !important;
+}
+
+/* unvisited link */
+a:link {
+  color: none;
+}
+
+/* visited link */
+a:visited {
+  color: none;
+}
+
+/* mouse over link */
+a:hover {
+  color: #bfdad9;
+}
+
+/* selected link */
+a:active {
+  color: none;
 }
