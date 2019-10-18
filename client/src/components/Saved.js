@@ -21,6 +21,7 @@ export default class Saved extends React.Component {
   render() {
     return (
       <div className="savedContainer">
+        <div className="logo">My Favorites</div>
         <Search
           showDeleteButton={true}
           books={this.state.books}
