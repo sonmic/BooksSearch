@@ -10,11 +10,11 @@ function App() {
   return (
     <Router>
       <div>
-        <BookAppBar onSearch={results => setBooks(results)} />
+        <BookAppBar onSearch={setBooks} />
         <Switch>
           <Route exact path="/fav" component={Saved} />
           <Route>
-            <Search books={books} />
+            <Search books={books} onSearch={setBooks} />
           </Route>
         </Switch>
       </div>

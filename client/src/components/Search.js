@@ -7,6 +7,7 @@ import FavoriteIcon from "@material-ui/icons/Favorite";
 import InfoIcon from "@material-ui/icons/Info";
 import IconButton from "@material-ui/core/IconButton";
 import axios from "axios";
+import SearchField from "./SearchField";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -94,16 +95,21 @@ function Book({ book, showDeleteButton, onDelete }) {
     </div>
   );
 }
-function Search({ books, showDeleteButton, onDelete }) {
+function Search({ books, showDeleteButton, onDelete, onSearch }) {
   return (
-    <div className="searchContainer">
-      {books.map(book => (
-        <Book
-          book={book}
-          showDeleteButton={showDeleteButton}
-          onDelete={onDelete}
-        />
-      ))}
+    <div className="searchPageContainer">
+      <div className="logo">Google Book Search</div>
+      <SearchField onSearch={onSearch} />
+
+      <div className="searchContainer">
+        {books.map(book => (
+          <Book
+            book={book}
+            showDeleteButton={showDeleteButton}
+            onDelete={onDelete}
+          />
+        ))}
+      </div>
     </div>
   );
 }

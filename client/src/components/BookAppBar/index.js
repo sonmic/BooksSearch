@@ -1,18 +1,15 @@
-import React, { useState } from "react";
-import { fade, makeStyles } from "@material-ui/core/styles";
+import React from "react";
+import { makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
-import InputBase from "@material-ui/core/InputBase";
 import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
-import MenuIcon from "@material-ui/icons/Menu";
-import SearchIcon from "@material-ui/icons/Search";
 import FavoriteIcon from "@material-ui/icons/Favorite";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import axios from "axios";
 import { withRouter } from "react-router-dom";
+import SearchField from "../SearchField";
+import BottomNavigationAction from "@material-ui/core/BottomNavigationAction";
 
 const useStyles = makeStyles(theme => ({
   grow: {
@@ -26,30 +23,6 @@ const useStyles = makeStyles(theme => ({
     [theme.breakpoints.up("sm")]: {
       display: "block"
     }
-  },
-  search: {
-    position: "relative",
-    borderRadius: theme.shape.borderRadius,
-    backgroundColor: fade(theme.palette.common.white, 0.15),
-    "&:hover": {
-      backgroundColor: fade(theme.palette.common.white, 0.25)
-    },
-    marginRight: theme.spacing(2),
-    marginLeft: 0,
-    width: "100%",
-    [theme.breakpoints.up("sm")]: {
-      marginLeft: theme.spacing(3),
-      width: "auto"
-    }
-  },
-  searchIcon: {
-    width: theme.spacing(7),
-    height: "100%",
-    position: "absolute",
-    pointerEvents: "none",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center"
   },
   inputRoot: {
     color: "inherit"
@@ -75,37 +48,6 @@ const useStyles = makeStyles(theme => ({
     }
   }
 }));
-
-function bookSearch(query) {
-  return axios.get(
-    `https://www.googleapis.com/books/v1/volumes?q=${query}&key=AIzaSyDPW-tCMp7LrSdITc6L3UZ3Wcal4viwG7w`
-  );
-}
-
-function convertBooks(response) {
-  const { data = {} } = response;
-  const { items = [] } = data;
-  return items.map(item => {
-    const { volumeInfo } = item;
-    const {
-      title,
-      subtitle,
-      authors = [],
-      description,
-      imageLinks = {},
-      canonicalVolumeLink
-    } = volumeInfo;
-    const { smallThumbnail } = imageLinks;
-    return {
-      authors,
-      description,
-      image: smallThumbnail,
-      link: canonicalVolumeLink,
-      title,
-      subtitle
-    };
-  });
-}
 
 function BookAppBar(props) {
   const classes = useStyles();
@@ -163,7 +105,7 @@ function BookAppBar(props) {
   const { onSearch, history } = props;
   return (
     <div className={classes.grow}>
-      <AppBar position="static">
+      <AppBar position="static" color="default">
         <Toolbar>
           <IconButton
             edge="start"
@@ -172,37 +114,21 @@ function BookAppBar(props) {
             aria-label="open drawer"
           ></IconButton>
           <Typography className={classes.title} variant="h6" noWrap>
-            Material-UI
+            Google Book Search
           </Typography>
-          <div className={classes.search}>
-            <div className={classes.searchIcon}>
-              <SearchIcon />
-            </div>
-            <InputBase
-              onChange={event => {
-                bookSearch(event.target.value).then(response =>
-                  onSearch(convertBooks(response))
-                );
-              }}
-              placeholder="Search…"
-              classes={{
-                root: classes.inputRoot,
-                input: classes.inputInput
-              }}
-              inputProps={{ "aria-label": "search" }}
-            />
-          </div>
+          <SearchField onSearch={onSearch} />
           <div className={classes.grow} />
           <div className={classes.sectionDesktop}>
-            <IconButton
+            <BottomNavigationAction
+              label="Favorites"
+              icon={<FavoriteIcon />}
+              showLabel
               onClick={() =>
                 history.push(
                   history.location.pathname.indexOf("fav") >= 0 ? "/" : "/fav"
                 )
               }
-            >
-              <FavoriteIcon />
-            </IconButton>
+            />
           </div>
         </Toolbar>
       </AppBar>
