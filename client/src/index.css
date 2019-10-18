@@ -10,20 +10,24 @@ body {
 
 /* unvisited link */
 a:link {
-  color: none;
+  color: inherit !important;
+  text-decoration: none;
 }
 
 /* visited link */
 a:visited {
-  color: none;
+  color: inherit !important;
+  text-decoration: none;
 }
 
 /* mouse over link */
 a:hover {
   color: #bfdad9;
+  text-decoration: none;
 }
 
 /* selected link */
 a:active {
-  color: none;
+  color: inherit !important;
+  text-decoration: none;
 }

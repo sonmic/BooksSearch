@@ -32,7 +32,11 @@ function Book({ book, showDeleteButton, onDelete }) {
         <Grid container spacing={1}>
           <Grid item xs={10}>
             <div className={classes.paper}>
-              <div className="title">{title} </div>
+              <div className="title">
+                <a href={link} target="_blank">
+                  {title}{" "}
+                </a>
+              </div>
               <div className="subTitle">{subtitle} </div>
               <div className="author">{authors.join(", ")}</div>
             </div>
@@ -81,7 +85,9 @@ function Book({ book, showDeleteButton, onDelete }) {
           <Grid item xs={3}>
             <div className={classes.paper}>
               <div className="preview">
-                <img src={image} alt="preview" className="bookImage" />
+                <a href={link} target="_blank">
+                  <img src={image} alt="preview" className="bookImage" />
+                </a>
               </div>
             </div>
           </Grid>
@@ -100,8 +106,11 @@ function Book({ book, showDeleteButton, onDelete }) {
 function Search({ books, showDeleteButton, onDelete, onSearch }) {
   return (
     <div className="searchPageContainer">
-      <div className="logo">Book.com</div>
-      <SearchField onSearch={onSearch} />
+      <div className="logoContainer">
+        <div className="logo">Book.com</div>
+        <div className="sublogo">One search, all books.</div>
+        <SearchField onSearch={onSearch} />
+      </div>
 
       <div className="searchContainer">
         {books.map(book => (

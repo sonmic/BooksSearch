@@ -114,7 +114,7 @@ function BookAppBar(props) {
             aria-label="open drawer"
           ></IconButton>
           <Typography className={classes.title} variant="h6" noWrap>
-            Book.com
+            <a href="/">Book.com</a>
           </Typography>
           <SearchField onSearch={onSearch} />
           <div className={classes.grow} />
