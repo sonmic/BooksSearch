@@ -56,7 +56,7 @@ body {
 }
 
 .MuiSvgIcon-colorSecondary,
-.MuiBottomNavigationAction-root {
+.MuiBottomNavigationAction-root svg {
   color: #ef8393 !important;
 }
 
@@ -72,4 +72,8 @@ body {
 .description {
   font-family: "Quicksand", sans-serif;
   font-weight: 300 !important;
+}
+
+.MuiInput-underline:after {
+  border-bottom: 2px solid #bfdad9 !important;
 }
