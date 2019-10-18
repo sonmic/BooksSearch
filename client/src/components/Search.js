@@ -22,7 +22,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 function Book({ book, showDeleteButton, onDelete }) {
-  const { authors, description, image, link, title, subtitle } = book;
+  const { authors, description = "", image, link, title, subtitle } = book;
   const classes = useStyles();
   const [favoriteOnly, setFavoriteOnly] = useState(false);
 
@@ -87,7 +87,9 @@ function Book({ book, showDeleteButton, onDelete }) {
           </Grid>
           <Grid item xs={9}>
             <div className={classes.paper}>
-              <div className="description">{description} </div>
+              <div className="description">
+                {description.replace(/(.{800})..+/, "$1…")}{" "}
+              </div>
             </div>
           </Grid>
         </Grid>
@@ -98,7 +100,7 @@ function Book({ book, showDeleteButton, onDelete }) {
 function Search({ books, showDeleteButton, onDelete, onSearch }) {
   return (
     <div className="searchPageContainer">
-      <div className="logo">Google Book Search</div>
+      <div className="logo">Book.com</div>
       <SearchField onSearch={onSearch} />
 
       <div className="searchContainer">
